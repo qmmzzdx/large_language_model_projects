@@ -27,6 +27,7 @@ gpt_classification/
 
 - 训练微调阶段：python gpt_classification_model.py
 - 部署运行阶段：chainlit run chainlit_gpt_classification.py
+- 备注：可以直接clone项目后一键部署运行，项目内已有lora微调后的模型参数
 
 ## 模型训练与微调功能详解
 
