@@ -362,7 +362,7 @@ plot_metrics(trainer.state.log_history)
 
 ## chainlit可视化交互界面
 
-## 1. 模型加载模块
+### 1. 模型加载模块
 - 检查本地是否存在lora_model目录
 - 加载基础GPT-2分词器并配置pad_token
 - 初始化基础GPT-2分类模型(二分类)
@@ -403,7 +403,7 @@ def get_model_and_tokenizer():
     return tokenizer, model
 ```
 
-## 2. 文本分类模块
+### 2. 文本分类模块
 - 接收用户输入文本
 - 使用分词器进行编码和填充(max_length=120)
 - 将输入转换为PyTorch张量并送入device(CPU/GPU)
@@ -434,7 +434,7 @@ def classify_review(user_input):
     return "垃圾信息" if predicted_class == 1 else "正常信息"
 ```
 
-## 3. Chainlit交互模块
+### 3. Chainlit交互模块
 - 异步监听用户消息输入
 - 验证输入非空
 - 调用分类函数获取结果
