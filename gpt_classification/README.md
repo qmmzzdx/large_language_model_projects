@@ -88,7 +88,7 @@ tokenizer.pad_token = tokenizer.eos_token          # 设置 pad token
 **分类模型加载**
 | 参数           | 值              | 作用                              |
 |----------------|-----------------|-----------------------------------|
-| `"gpt2"`       | 模型标识         | 加载125M参数的GPT-2基础架构       |
+| `"gpt2"`       | 模型标识         | 加载124M参数的GPT-2基础架构       |
 | `num_labels`   | 2               | 添加二分类输出层(spam/ham)        |
 | `pad_token_id` | `eos_token_id`  | 使模型忽略填充位置的计算           |
 - `gpt_classification_model.py`模型加载相关代码
