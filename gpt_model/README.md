@@ -24,7 +24,7 @@ gpt_model/
 
 ## 项目运行流程
 
-- Terminal> python -m test.test_gpt_model
+- Terminal> python -m tests.test_gpt_model
 
 ## 项目总览
 
