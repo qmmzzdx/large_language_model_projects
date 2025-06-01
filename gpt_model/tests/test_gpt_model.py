@@ -162,9 +162,9 @@ def plot_training_curves(train_losses, val_losses, tokens_seen, lrs):
 
     # 调整布局以避免重叠
     plt.tight_layout()
-
-    # 显示图形
-    plt.show()
+    # 保存训练曲线
+    plt.savefig("training_metrics.pdf")  # 保存图表为 PDF 文件
+    plt.close()
 
 
 def main():
