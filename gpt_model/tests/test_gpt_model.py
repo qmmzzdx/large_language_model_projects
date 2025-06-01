@@ -196,7 +196,8 @@ def main():
 
     model = GPTModel(gpt_config)
     # 将 Hugging Face 模型的权重加载到自定义模型中
-    model.load_weights(gpt_config, gpt_hf).to(device)
+    model.load_weights(gpt_config, gpt_hf)
+    model = model.to(device)
     # 设置自定义模型为评估模式
     model.eval()
 
