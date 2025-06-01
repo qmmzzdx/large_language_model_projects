@@ -1,6 +1,6 @@
 # GPT2 LLM Model
 
-一个基于 Transformer 架构的 GPT2 模型实现，旨在提供一个本地复现可训练的文本生成和指令微调模型。主要实现了文本生成的核心功能，支持多种配置的 GPT2 模型。
+一个基于 Transformer 架构的 GPT2 模型实现，旨在提供一个本地复现可训练的文本生成模型。主要实现了文本生成的核心功能，支持多种配置的 GPT2 模型。
 
 ## 项目结构
 
@@ -19,7 +19,7 @@ gpt_model/
 │   └── transformer_block.py    # Transformer 块模块
 └── tests/                      # 测试代码目录
     ├── gpt_training.py         # 训练模型的测试
-    └── test_gpt_model.py       # GPT 模型的单元测试
+    └── test_gpt_model.py       # GPT 模型的文本生成单元测试
 ```
 
 ## 项目运行流程
