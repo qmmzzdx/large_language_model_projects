@@ -263,7 +263,7 @@ P(x) = \frac{e^{\frac{log(P(x))}{T}}}{\sum_{i} e^{\frac{log(P(x_i))}{T}}}
 
 - 训练过程中，模型将读取 `the-verdict.txt` 文件中的数据，进行训练并输出训练损失和验证损失。
 
-### 4. 生成文本
+### 4. 测试生成文本
 
 - 训练完成后，使用 `src/generate_text.py` 中的 `generate_text` 函数，根据训练好的模型生成文本。可以在 `tests/gpt_training.py` 中设置生成文本的起始上下文。
 
