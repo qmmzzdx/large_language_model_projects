@@ -175,7 +175,7 @@ $$
   - 对于每个时间步 $t$，模型的输出可以表示为：
 
 $$
-\text{z_t} = W_{\text{out}} h_t + b_{\text{out}}
+z_t = W_{\text{out}} h_t + b_{\text{out}}
 $$
   - $z_t$ 是当前时间步的 logits 向量。
   - $W_{out}$ 是输出权重矩阵。
