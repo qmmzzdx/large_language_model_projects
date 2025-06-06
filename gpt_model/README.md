@@ -715,3 +715,149 @@ if __name__ == "__main__":
 - **流畅性**：生成文本的自然程度和可读性。
 - **相关性**：响应与输入指令的相关性。
 评分范围为 0 到 100，100 表示最佳评分。
+
+## 使用chainlit生成类ChatGPT交互界面
+
+### Chainlit介绍
+
+Chainlit 是一个用于构建和部署交互式机器学习应用的框架，特别适合于与自然语言处理（NLP）模型进行交互。它旨在简化机器学习模型的用户界面开发，使得开发者能够快速创建可视化的应用程序，以便用户与模型进行实时交互。
+
+### 主要特点
+
+1. **简化的 API**：
+   - Chainlit 提供了简单易用的 API，使得开发者可以快速上手，无需深入了解前端开发的复杂性。通过简单的装饰器和函数调用，开发者可以轻松创建交互式界面。
+
+2. **实时交互**：
+   - 用户可以通过浏览器与模型进行实时交互，输入文本并立即获取模型的响应。这种即时反馈增强了用户体验，使得应用更具互动性。
+
+3. **支持多种模型**：
+   - Chainlit 可以与多种机器学习模型集成，包括但不限于 GPT、BERT、T5 等。无论是文本生成、文本分类还是其他 NLP 任务，Chainlit 都能提供支持。
+
+4. **可扩展性**：
+   - 开发者可以根据需要扩展 Chainlit 的功能，添加自定义组件、逻辑和样式。这使得 Chainlit 适用于各种不同的应用场景。
+
+5. **易于部署**：
+   - Chainlit 应用可以轻松部署到云端或本地服务器，方便用户访问。开发者可以通过简单的命令将应用发布到生产环境。
+
+6. **支持多种输入输出格式**：
+   - Chainlit 支持多种输入输出格式，包括文本、图像、音频等，允许开发者创建更丰富的交互体验。
+
+### 主要功能
+
+1. **消息处理**：
+   - Chainlit 提供了 `@chainlit.on_message` 装饰器，允许开发者定义处理用户消息的函数。通过这个功能，开发者可以轻松处理用户输入并生成相应的模型输出。
+
+2. **状态管理**：
+   - Chainlit 允许开发者在会话中管理状态，保存用户的输入和模型的输出，以便在后续交互中使用。
+
+3. **自定义组件**：
+   - 开发者可以创建自定义组件，以满足特定的需求。这些组件可以是输入框、按钮、图表等，增强了应用的灵活性和可用性。
+
+4. **多用户支持**：
+   - Chainlit 支持多用户同时访问应用，适合于需要多人交互的场景，如在线教育、客户支持等。
+
+5. **集成外部 API**：
+   - 开发者可以轻松集成外部 API，以增强应用的功能。例如，可以将 Chainlit 应用与数据库、第三方服务等结合使用。
+
+### 使用场景
+
+1. **对话系统**：
+   - Chainlit 非常适合构建聊天机器人和对话系统，用户可以与模型进行自然语言对话，获取信息或完成任务。
+
+2. **教育和培训**：
+   - 在教育领域，Chainlit 可以用于创建互动学习工具，帮助学生通过与模型的对话来学习新知识。
+
+3. **客户支持**：
+   - 企业可以使用 Chainlit 构建客户支持系统，自动回答常见问题，提高客户服务效率。
+
+4. **内容生成**：
+   - Chainlit 可以用于内容生成应用，用户可以输入主题或关键词，模型生成相关的文本内容。
+
+5. **数据分析**：
+   - 开发者可以使用 Chainlit 创建数据分析工具，用户可以通过自然语言查询数据，获取分析结果。
+
+### chainlit_main.py中的使用
+
+```python
+def get_model_and_tokenizer():
+    """
+    加载GPT模型和tokenizer
+    """
+    tokenizer = tiktoken.get_encoding("gpt2")
+    gpt_config = load_gpt_config(model_name='GPT_CONFIG_774M')
+```
+- **获取模型和 tokenizer**：定义一个函数 `get_model_and_tokenizer`，用于加载 GPT 模型和 tokenizer。
+- **加载 tokenizer**：使用 `tiktoken` 库加载 GPT-2 的编码器。
+- **加载模型配置**：调用 `load_gpt_config` 函数加载模型的配置。
+
+```python
+    # 加载 LoRA 权重
+    lora_model_path = Path("lora_model/gpt-sft-lora.pth")
+    if not lora_model_path.exists():
+        print(f"Could not find the {lora_model_path} file. Please ensure the LoRA model is saved.")
+        sys.exit(1)
+```
+- **加载 LoRA 权重**：指定 LoRA 模型的路径，并检查该文件是否存在。如果不存在，则输出错误信息并退出程序。
+
+```python
+    lora_checkpoint = torch.load(lora_model_path, weights_only=True, map_location=device)
+    model = GPTModel(gpt_config)
+    model.load_state_dict(lora_checkpoint, strict=False)  # 加载LoRA权重，允许不严格匹配
+    model.to(device)
+    return tokenizer, model, gpt_config
+```
+- **加载模型权重**：使用 `torch.load` 加载 LoRA 权重，并将其应用到 `GPTModel` 实例中。
+- **返回 tokenizer 和模型**：返回加载的 tokenizer、模型和配置。
+
+```python
+def extract_response(response_text, input_text):
+    return response_text[len(input_text):].replace("<|assistant|>:", "").strip()
+```
+- **提取响应**：定义一个函数 `extract_response`，用于从模型生成的文本中提取实际的回复。它通过去掉输入文本和特定标记来实现。
+
+```python
+# 获取必要的tokenizer和模型文件
+tokenizer, model, gpt_config = get_model_and_tokenizer()
+```
+- **初始化模型和 tokenizer**：调用 `get_model_and_tokenizer` 函数，获取 tokenizer、模型和配置。
+
+```python
+@chainlit.on_message
+async def main(message: chainlit.Message):
+    """
+    主 Chainlit 函数。
+    """
+    torch.manual_seed(123)
+```
+- **定义主函数**：使用 `@chainlit.on_message` 装饰器定义一个异步函数 `main`，用于处理用户消息。
+- **设置随机种子**：设置 PyTorch 的随机种子，以确保结果的可重复性。
+
+```python
+    prompt = f"<|user|>\n{message.content}"
+```
+- **构建提示**：将用户输入的消息格式化为模型的提示。
+
+```python
+    token_ids = generate_text(
+        model=model,
+        idx=text_to_token_ids(prompt, tokenizer).to(device),
+        max_new_tokens=35,
+        context_size=gpt_config["context_length"],
+        temperature=0.2, top_k=5, eos_id=50256
+    )
+```
+- **生成文本**：调用 `generate_text` 函数生成模型的回复。传入模型、输入的 token ID、最大生成的 token 数量、上下文大小、温度、top-k 采样和结束符 ID。
+
+```python
+    text = token_ids_to_text(token_ids, tokenizer)
+    response = extract_response(text, prompt)
+```
+- **转换 token ID 为文本**：将生成的 token ID 转换为可读文本。
+- **提取模型响应**：使用 `extract_response` 函数提取模型的实际回复。
+
+```python
+    await chainlit.Message(
+        content=f"{response}",
+    ).send()
+```
+- **发送消息**：将模型的回复通过 Chainlit 界面发送给用户。
